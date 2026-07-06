@@ -22,6 +22,19 @@ const options = [
     ],
   },
   {
+    href: "/rezervacija/mivka",
+    title: "Rezervacija odbojke na mivki",
+    description:
+      "Igrišče za odbojko na mivki z mrežo in stebri. Idealno za turnirje, uritve in športne prireditve.",
+    icon: "🏐",
+    details: [
+      "Oznjeno igrišče za odbojko na mivki",
+      "Termini: 1-urna granulacija (8:00 – 23:00)",
+      "Mreža in stebri v uporabi",
+      "Parkirišče",
+    ],
+  },
+  {
     href: "/rezervacija/piknik",
     title: "Rezervacija piknik prostora",
     description:

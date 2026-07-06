@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/app/_lib/supabase/server";
 
-export type ReservationType = "dvorana" | "piknik";
+export type ReservationType = "dvorana" | "piknik" | "mivka";
 
 interface State {
   success?: boolean;
@@ -22,7 +22,7 @@ export async function createReservation(
   const purpose = (formData.get("purpose") as string | null)?.trim() ?? "";
   const notes = (formData.get("notes") as string | null)?.trim() || null;
   const time_slot =
-    type === "dvorana"
+    type === "dvorana" || type === "mivka"
       ? (formData.get("time_slot") as string | null)?.trim() ?? ""
       : null;
 
@@ -34,7 +34,7 @@ export async function createReservation(
     return { error: "Vnesite veljaven e-poštni naslov." };
   }
 
-  if (type === "dvorana" && !time_slot) {
+  if ((type === "dvorana" || type === "mivka") && !time_slot) {
     return { error: "Izberite časovni termin." };
   }
 
@@ -66,6 +66,45 @@ export async function createReservation(
       }
       if (takenSlots.includes(time_slot)) {
         return { error: "Ta termin je že zaseden. Izberite drug termin ali datum." };
+      }
+    }
+  } else if (type === "mivka") {
+    // For mivka, time_slot is comma-separated hourly slots like "10-11,11-12,12-13"
+    const requestedHourlySlots = (time_slot ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+    
+    const { data: existing } = await supabase
+      .from("reservations")
+      .select("time_slot")
+      .eq("type", "mivka")
+      .eq("date", date)
+      .in("status", ["caka", "potrjeno"]);
+
+    if (existing) {
+      const takenSlots = existing.map((r) => r.time_slot).filter(Boolean) as string[];
+      
+      // Parse all taken hours
+      const takenHours = new Set<number>();
+      for (const slot of takenSlots) {
+        if (!slot) continue;
+        const individualSlots = slot.split(",").map((s) => s.trim());
+        for (const individualSlot of individualSlots) {
+          const parts = individualSlot.split("-");
+          if (parts.length === 2) {
+            const startHour = parseInt(parts[0], 10);
+            takenHours.add(startHour);
+          }
+        }
+      }
+      
+      // Check if any requested hour is already taken
+      for (const slot of requestedHourlySlots) {
+        const parts = slot.split("-");
+        if (parts.length === 2) {
+          const startHour = parseInt(parts[0], 10);
+          if (takenHours.has(startHour)) {
+            return { error: `Termin ${slot} je že zaseden. Izberite drug termin ali datum.` };
+          }
+        }
       }
     }
   } else {

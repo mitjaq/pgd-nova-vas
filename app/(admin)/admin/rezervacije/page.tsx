@@ -36,8 +36,50 @@ const timeSlotLabels: Record<string, string> = {
   celdan: "Cel dan (8–23)",
 };
 
+function formatTimeSlot(type: string, timeSlot: string | null): string {
+  if (!timeSlot) return "";
+  
+  // For mivka, time_slot is comma-separated hourly slots like "10-11,11-12,12-13"
+  if (type === "mivka") {
+    const slots = timeSlot.split(",").map((s) => s.trim());
+    if (slots.length === 1) {
+      return slots[0];
+    }
+    // Group consecutive hours
+    const hours: number[] = [];
+    for (const slot of slots) {
+      const parts = slot.split("-");
+      if (parts.length === 2) {
+        const startHour = parseInt(parts[0], 10);
+        if (!isNaN(startHour)) hours.push(startHour);
+      }
+    }
+    if (hours.length === 0) return timeSlot;
+    
+    hours.sort((a, b) => a - b);
+    const groups: number[][] = [];
+    let currentGroup = [hours[0]];
+    for (let i = 1; i < hours.length; i++) {
+      if (hours[i] === hours[i - 1] + 1) {
+        currentGroup.push(hours[i]);
+      } else {
+        groups.push(currentGroup);
+        currentGroup = [hours[i]];
+      }
+    }
+    groups.push(currentGroup);
+    
+    return groups
+      .map((g) => `${g[0]}:00 – ${g[g.length - 1] + 1}:00`)
+      .join(", ");
+  }
+  
+  return timeSlotLabels[timeSlot] ?? timeSlot;
+}
+
 const typeLabels: Record<string, string> = {
   dvorana: "🏛️ Dvorana",
+  mivka: "🏐 Mivka",
   piknik: "🌿 Piknik",
 };
 
@@ -97,7 +139,7 @@ export default async function AdminRezervacijePage() {
                         {r.time_slot && (
                           <div>
                             <span className="text-gray-400">Termin:</span>{" "}
-                            <strong className="text-pgd-gray">{timeSlotLabels[r.time_slot] ?? r.time_slot}</strong>
+                            <strong className="text-pgd-gray">{formatTimeSlot(r.type, r.time_slot)}</strong>
                           </div>
                         )}
                         <div>

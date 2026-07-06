@@ -103,11 +103,14 @@ insert into interventions (title, description, date, location, type) values
 ('Letna gasilska vaja', 'Letna taktična vaja z simulacijo požara stanovanjskega objekta.', '2024-06-15', 'Stara šola, Nova vas', 'vaja');
 
 -- Reservations (Rezervacije)
+-- NOTE: time_slot constraint removed to support hourly slots for mivka (e.g., "8-9", "9-10")
+-- Run this migration after existing data is handled:
+-- ALTER TABLE reservations DROP CONSTRAINT reservations_time_slot_check;
 create table if not exists reservations (
   id uuid primary key default uuid_generate_v4(),
-  type text not null check (type in ('dvorana', 'piknik')),
+  type text not null check (type in ('dvorana', 'piknik', 'mivka')),
   date date not null,
-  time_slot text check (time_slot in ('dopoldne', 'popoldne', 'vecer', 'celdan')),
+  time_slot text,
   name text not null,
   email text not null,
   phone text not null,
