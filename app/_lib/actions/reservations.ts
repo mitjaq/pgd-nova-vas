@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/app/_lib/supabase/server";
+import { sendAdminNotification } from "@/app/_lib/email";
 
 export type ReservationType = "dvorana" | "piknik" | "mivka";
 
@@ -137,6 +138,19 @@ export async function createReservation(
   }
 
   revalidatePath(`/rezervacija/${type}`);
+
+  
+  sendAdminNotification({
+    type,
+    date,
+    time_slot,
+    name,
+    email,
+    phone,
+    purpose,
+    notes,
+  });
+
   return { success: true };
 }
 
