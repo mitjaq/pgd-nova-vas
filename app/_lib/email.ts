@@ -30,7 +30,7 @@ export async function sendAdminNotification(reservation: {
     ? `Opombe: ${reservation.notes}\n`
     : "";
 
-  const subject = `Novo rezervacija: ${typeLabel} - ${reservation.date}`;
+  const subject = `Nova rezervacija: ${typeLabel} - ${reservation.date}`;
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -58,7 +58,7 @@ export async function sendAdminNotification(reservation: {
   try {
     console.log("Pošiljam mail adminu:" +process.env.ADMIN_EMAIL)
     await resend.emails.send({
-      from: "PGD Nova Vas <onboarding@resend.dev>",
+      from: "PGD Nova vas pri Markovcih <onboarding@resend.dev>",
       to: process.env.ADMIN_EMAIL,
       subject: subject,
       html: html,
