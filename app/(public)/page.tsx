@@ -47,8 +47,12 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative bg-pgd-gray text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-pgd-gray via-gray-800 to-pgd-red opacity-90" />
+      <section className="relative text-white overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/images/background.png')" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-pgd-gray via-gray-800 to-pgd-red opacity-70" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-pgd-red bg-opacity-20 border border-pgd-red border-opacity-40 rounded-full px-4 py-1.5 text-sm font-medium text-red-300 mb-6">
@@ -57,7 +61,7 @@ export default async function HomePage() {
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-6">
               PGD Nova vas
-              <span className="block text-pgd-red mt-1">pri Markovcih</span>
+              <span className="text-pgd-red mt-1"> pri Markovcih</span>
             </h1>
             <p className="text-gray-300 text-lg leading-relaxed mb-8">
               Skupaj varujemo našo skupnost. Prostovoljni gasilci smo vedno pripravljeni pomagati — 24 ur na dan, 7 dni v tednu.

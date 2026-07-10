@@ -23,12 +23,13 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-pgd-red rounded-full flex items-center justify-center text-white font-bold text-sm group-hover:bg-pgd-red-dark transition-colors">
-              PGD
-            </div>
+            <img
+              src="/images/logo.png"
+              alt="PGD Nova vas pri Markovcih"
+              className="w-10 h-10 rounded-full object-cover group-hover:opacity-90 transition-opacity"
+            />
             <div className="hidden sm:block">
-              <div className="font-bold text-base leading-tight">PGD Nova vas</div>
-              <div className="text-xs text-gray-400">pri Markovcih</div>
+              <div className="font-bold text-base leading-tight">PGD Nova vas pri Markovcih</div>
             </div>
           </Link>
 
