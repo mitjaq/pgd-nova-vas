@@ -34,8 +34,8 @@ export async function sendAdminNotification(reservation: {
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2 style="color: #333; border-bottom: 2px solid #e53e3e; padding-bottom: 10px;">Novo rezervacijsko geslo</h2>
-      <p style="color: #555; line-height: 1.6;">Prejeto je bilo novo geslo za rezervacijo:</p>
+      <h2 style="color: #333; border-bottom: 2px solid #e53e3e; padding-bottom: 10px;">Nova rezervacija</h2>
+      <p style="color: #555; line-height: 1.6;">Prejeta je bila nova zahteva za rezervacijo:</p>
       
       <div style="background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 20px 0;">
         <p style="margin: 8px 0; color: #333;"><strong>Vrsta rezervacije:</strong> ${typeLabel}</p>
@@ -56,8 +56,9 @@ export async function sendAdminNotification(reservation: {
   `;
 
   try {
+    console.log("Pošiljam mail adminu:" +process.env.ADMIN_EMAIL)
     await resend.emails.send({
-      from: "PGD Nova Vas <noreply@pgd-novav.si>",
+      from: "PGD Nova Vas <onboarding@resend.dev>",
       to: process.env.ADMIN_EMAIL,
       subject: subject,
       html: html,
