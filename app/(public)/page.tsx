@@ -90,7 +90,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             {[
               { value: "50+", label: "Aktivnih članov" },
-              { value: "1960", label: "Leto ustanovitve" },
+              { value: "1923", label: "Leto ustanovitve" },
               { value: "24/7", label: "Pripravljenost" },
               { value: "112", label: "Klic v sili" },
             ].map((stat) => (
